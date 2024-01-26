@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import AppName from "./components/AppName";
+import AddTodo from "./components/AddTodo";
+import TodoItems from "./components/TodoItems";
+import WelcomeMessage from "./components/WelcomeMessage";
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [todoItems, setTodoItems] = useState([]);
+
+  const handleNewItem = (itemName, itemDueDate) => {
+    console.log(`New Item Added: ${itemName} Date:${itemDueDate}`);
+    const newTodoItems = [
+      ...todoItems,
+      { name: itemName, dueDate: itemDueDate },
+    ];
+    setTodoItems(newTodoItems);
+  };
+
+  const handleDeleteItem = (todoItemName) => {
+    const newTodoItems = todoItems.filter((item) => item.name !== todoItemName);
+    setTodoItems(newTodoItems);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <center className="todo-container">
+      <AppName />
+      <AddTodo onNewItem={handleNewItem} />
+      {todoItems.length === 0 && <WelcomeMessage></WelcomeMessage>}
+      <TodoItems
+        todoItems={todoItems}
+        onDeleteClick={handleDeleteItem}
+      ></TodoItems>
+    </center>
   );
 }
 
